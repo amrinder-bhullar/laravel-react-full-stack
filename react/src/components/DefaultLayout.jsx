@@ -29,6 +29,7 @@ function DefaultLayout() {
             <aside>
                 <Link to="/dashboard">Dashbooard</Link>
                 <Link to="/users">Users</Link>
+                <Link to="/tickets">Tickets</Link>
             </aside>
             <div className="content">
                 <header>
