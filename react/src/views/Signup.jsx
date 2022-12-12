@@ -22,6 +22,8 @@ function Signup() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
+            company_id: 1,
+            type: user,
         };
 
         // console.log(payload);

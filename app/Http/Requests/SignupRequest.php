@@ -29,6 +29,8 @@ class SignupRequest extends FormRequest
             'name' => ['required'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()],
+            'company_id' => ['numeric'],
+            'type' => ['string']
         ];
     }
 }
