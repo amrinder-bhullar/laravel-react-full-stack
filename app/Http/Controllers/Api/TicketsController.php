@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TicketResource;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 class TicketsController extends Controller
@@ -14,7 +16,9 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        //
+        return TicketResource::collection(
+            Ticket::query()->orderBy('id', 'desc')->paginate(10)
+        );
     }
 
     /**
