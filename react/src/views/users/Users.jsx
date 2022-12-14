@@ -2,24 +2,24 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "../axios-client";
+import axiosClient from "../../axios-client";
 
-function Tickets() {
-    const [tickets, setTickets] = useState([]);
+function Users() {
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        getTickets();
+        getUsers();
     }, []);
 
-    const getTickets = () => {
+    const getUsers = () => {
         setLoading(true);
 
         axiosClient
-            .get("/tickets")
+            .get("/users")
             .then(({ data }) => {
                 setLoading(false);
-                setTickets(data.data);
+                setUsers(data.data);
                 console.log(data);
             })
             .catch(() => {
@@ -27,16 +27,16 @@ function Tickets() {
             });
     };
 
-    // const onDelete = (ticket) => {
-    //     if (!window.confirm("Are you Sure you want to delete the tickets?")) {
-    //         return;
-    //     }
-    //     axiosClient.delete(`/ticket/${ticket.id}`).then((response) => {
-    //         console.log(response);
-    //         //TODO Show notification
-    //         getTickets();
-    //     });
-    // };
+    const onDelete = (user) => {
+        if (!window.confirm("Are you Sure you want to delete the user?")) {
+            return;
+        }
+        axiosClient.delete(`/users/${user.id}`).then((response) => {
+            console.log(response);
+            //TODO Show notification
+            getUsers();
+        });
+    };
 
     return (
         <div>
@@ -47,7 +47,7 @@ function Tickets() {
                     alignItems: "center",
                 }}
             >
-                <h1>Tickets</h1>
+                <h1>Users</h1>
                 <Link to="/users/new" className="btn-add">
                     Add new
                 </Link>
@@ -57,8 +57,8 @@ function Tickets() {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Issue</th>
-                            <th>message</th>
+                            <th>Name</th>
+                            <th>Email</th>
                             <th>Create Date</th>
                             <th>Actions</th>
                         </tr>
@@ -74,22 +74,22 @@ function Tickets() {
                     )}
                     {!loading && (
                         <tbody>
-                            {tickets.map((ticket) => (
-                                <tr key={ticket.id}>
-                                    <td>{ticket.id}</td>
-                                    <td>{ticket.title}</td>
-                                    <td>{ticket.body}</td>
-                                    <td>{ticket.created_at}</td>
+                            {users.map((user) => (
+                                <tr key={user.id}>
+                                    <td>{user.id}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.created_at}</td>
                                     <td>
                                         <Link
                                             className="btn-edit"
-                                            to={"/tickets/" + ticket.id}
+                                            to={"/users/" + user.id}
                                         >
-                                            View
+                                            Edit
                                         </Link>
                                         &nbsp;
                                         <button
-                                            // onClick={(e) => onDelete(user)}
+                                            onClick={(e) => onDelete(user)}
                                             className="btn-delete"
                                         >
                                             Delete
@@ -105,4 +105,4 @@ function Tickets() {
     );
 }
 
-export default Tickets;
+export default Users;

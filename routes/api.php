@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\TicketsController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/tickets', TicketsController::class);
+    Route::post('/tickets/{ticket}/message', [MessageController::class, 'store']);
 });
 
 Route::post('signup', [AuthController::class, 'signup']);

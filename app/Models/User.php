@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function Tickets()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

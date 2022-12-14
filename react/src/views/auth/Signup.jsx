@@ -1,11 +1,15 @@
-import React, { useRef, useState } from "react";
+import React from "react";
+import { useState } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "../axios-client";
-import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../../axios-client";
+import { useStateContext } from "../../contexts/ContextProvider";
 
-function Login() {
+function Signup() {
+    const nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
+    const passwordConfirmationRef = useRef();
 
     const [errors, setErrors] = useState(null);
 
@@ -14,27 +18,26 @@ function Login() {
     const onSubmit = (e) => {
         e.preventDefault();
         const payload = {
+            name: nameRef.current.value,
             email: emailRef.current.value,
             password: passwordRef.current.value,
+            password_confirmation: passwordConfirmationRef.current.value,
+            company_id: 1,
+            type: "user",
         };
-        setErrors(null);
+
+        // console.log(payload);
         axiosClient
-            .post("/login", payload)
+            .post("/signup", payload)
             .then(({ data }) => {
-                console.log();
                 setUser(data.user);
                 setToken(data.token);
             })
             .catch((err) => {
                 const response = err.response;
                 if (response && response.status === 422) {
-                    if (response.data.errors) {
-                        setErrors(response.data.errors);
-                    } else {
-                        setErrors({
-                            email: [response.data.message],
-                        });
-                    }
+                    console.log(response.data.errors);
+                    setErrors(response.data.errors);
                 }
             });
     };
@@ -42,7 +45,7 @@ function Login() {
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
                 <form onSubmit={onSubmit}>
-                    <h1 className="title">Login to your account</h1>
+                    <h1 className="title">Signup for free</h1>
                     {errors && (
                         <div className="alert">
                             {Object.keys(errors).map((key) => (
@@ -50,16 +53,22 @@ function Login() {
                             ))}
                         </div>
                     )}
-                    <input type="email" ref={emailRef} placeholder="Email" />
+                    <input ref={nameRef} placeholder="Full name" />
+                    <input ref={emailRef} type="email" placeholder="Email" />
                     <input
-                        type="password"
                         ref={passwordRef}
+                        type="password"
                         placeholder="Password"
                     />
-                    <button className="btn btn-block">Login</button>
+                    <input
+                        ref={passwordConfirmationRef}
+                        type="password"
+                        placeholder="Confirm Password"
+                    />
+                    <button className="btn btn-block">Sign up</button>
                     <p className="message">
-                        Not Registered{" "}
-                        <Link to="/signup">Create an account</Link>
+                        Already Registered
+                        <Link to="/login"> Sign in here</Link>
                     </p>
                 </form>
             </div>
@@ -67,4 +76,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Signup;

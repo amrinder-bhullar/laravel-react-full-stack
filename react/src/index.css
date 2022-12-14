@@ -20,7 +20,7 @@ body {
     background-color: #f6f6f6;
 }
 
-input {
+/* input {
     outline: 0;
     background: #ffffff;
     width: 100%;
@@ -30,7 +30,7 @@ input {
     box-sizing: border-box;
     font-size: 14px;
     transition: all 0.3s;
-}
+} */
 
 input:focus {
     border-color: #5b08a7;

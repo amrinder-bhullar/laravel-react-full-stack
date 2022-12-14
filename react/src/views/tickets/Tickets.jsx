@@ -2,24 +2,24 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "../axios-client";
+import axiosClient from "../../axios-client";
 
-function Users() {
-    const [users, setUsers] = useState([]);
+function Tickets() {
+    const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        getUsers();
+        getTickets();
     }, []);
 
-    const getUsers = () => {
+    const getTickets = () => {
         setLoading(true);
 
         axiosClient
-            .get("/users")
+            .get("/tickets")
             .then(({ data }) => {
                 setLoading(false);
-                setUsers(data.data);
+                setTickets(data.data);
                 console.log(data);
             })
             .catch(() => {
@@ -27,14 +27,14 @@ function Users() {
             });
     };
 
-    const onDelete = (user) => {
-        if (!window.confirm("Are you Sure you want to delete the user?")) {
+    const onDelete = (ticket) => {
+        if (!window.confirm("Are you Sure you want to delete the tickets?")) {
             return;
         }
-        axiosClient.delete(`/users/${user.id}`).then((response) => {
+        axiosClient.delete(`/ticket/${ticket.id}`).then((response) => {
             console.log(response);
             //TODO Show notification
-            getUsers();
+            getTickets();
         });
     };
 
@@ -47,7 +47,7 @@ function Users() {
                     alignItems: "center",
                 }}
             >
-                <h1>Users</h1>
+                <h1>Tickets</h1>
                 <Link to="/users/new" className="btn-add">
                     Add new
                 </Link>
@@ -57,8 +57,8 @@ function Users() {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Issue</th>
+                            <th>message</th>
                             <th>Create Date</th>
                             <th>Actions</th>
                         </tr>
@@ -74,22 +74,22 @@ function Users() {
                     )}
                     {!loading && (
                         <tbody>
-                            {users.map((user) => (
-                                <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.created_at}</td>
+                            {tickets.map((ticket) => (
+                                <tr key={ticket.id}>
+                                    <td>{ticket.id}</td>
+                                    <td>{ticket.title}</td>
+                                    <td>{ticket.body}</td>
+                                    <td>{ticket.created_at}</td>
                                     <td>
                                         <Link
                                             className="btn-edit"
-                                            to={"/users/" + user.id}
+                                            to={"/tickets/" + ticket.id}
                                         >
-                                            Edit
+                                            View
                                         </Link>
                                         &nbsp;
                                         <button
-                                            onClick={(e) => onDelete(user)}
+                                            onClick={(e) => onDelete(ticket)}
                                             className="btn-delete"
                                         >
                                             Delete
@@ -105,4 +105,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default Tickets;

@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TicketResource extends JsonResource
+class MessageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +16,10 @@ class TicketResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'ticket_id' => $this->ticket_id,
+            'user_id' => $this->user_id,
             'body' => $this->body,
-            'user' => new UserResource(User::find($this->user_id)),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'messages' => MessageResource::collection($this->whenLoaded('messages'))
         ];
     }
 }

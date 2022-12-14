@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TicketResource;
-use App\Models\Ticket;
+use App\Http\Resources\MessageResource;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
-class TicketsController extends Controller
+class MessageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,7 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        return TicketResource::collection(
-            Ticket::query()->orderBy('id', 'desc')->paginate(10)
-        );
+        return MessageResource::collection(Message::query()->orderBy('id', 'desc'));
     }
 
     /**
@@ -29,7 +27,15 @@ class TicketsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            "body" => "required",
+            "user_id" => "numeric",
+            "ticket_id" => "numeric"
+        ]);
+
+        Message::create($data);
+
+        return response(201);
     }
 
     /**
@@ -38,13 +44,9 @@ class TicketsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Ticket $ticket)
+    public function show(Message $message)
     {
-        $includeMessages = request()->query('includeMessages');
-
-        // return new TicketResource(Ticket::with('messages')->all());
-
-        return new TicketResource($ticket->load('messages'));
+        return new MessageResource($message);
     }
 
     /**

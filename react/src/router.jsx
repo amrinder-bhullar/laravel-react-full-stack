@@ -1,14 +1,15 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
-import CreateTicket from "./views/CreateTicket";
+import CreateTicket from "./views/tickets/CreateTicket";
 import Dashboard from "./views/Dashboard";
-import Login from "./views/Login";
+import Login from "./views/auth/Login";
 import NotFound from "./views/NotFound";
-import Signup from "./views/Signup";
-import Tickets from "./views/Tickets";
-import UserForm from "./views/UserForm";
-import Users from "./views/Users";
+import Signup from "./views/auth/Signup";
+import Tickets from "./views/tickets/Tickets";
+import UserForm from "./views/users/UserForm";
+import Users from "./views/users/Users";
+import ViewTicket from "./views/tickets/ViewTicket";
 
 const router = createBrowserRouter([
     {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Navigate to={"/users"} />,
+                element: <Navigate to={"/dashboard"} />,
             },
             {
                 path: "/dashboard",
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
             {
                 path: "/tickets",
                 element: <Tickets />,
+            },
+            {
+                path: "/tickets/:id",
+                element: <ViewTicket />,
             },
             {
                 path: "/tickets/create",
