@@ -19,6 +19,7 @@ class MessageResource extends JsonResource
             'ticket_id' => $this->ticket_id,
             'user_id' => $this->user_id,
             'body' => $this->body,
+            'image' => $this->image,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

@@ -14,6 +14,7 @@ const ViewTicket = () => {
     const [loading, setLoading] = useState(false);
     const params = useParams();
     const messageBody = useRef();
+    const messageFileRef = useRef();
     const [errors, setErrors] = useState(null);
     const { user } = useStateContext();
 
@@ -41,11 +42,15 @@ const ViewTicket = () => {
 
     const postMessage = (e) => {
         e.preventDefault();
+        const messageFileData = new FormData();
+        messageFileData.append("image", messageFileRef.current.files[0]);
         const payload = {
             body: messageBody.current.value,
+            image: messageFileData,
             ticket_id: ticket.id,
             user_id: user.id,
         };
+        console.log(messageFileRef.current.files[0]);
         axiosClient
             .post(`/tickets/${ticket.id}/message`, payload)
             .then(({ data }) => {
@@ -88,19 +93,18 @@ const ViewTicket = () => {
                         ))}
                     </div>
                 )}
-                <form
-                    onSubmit={postMessage}
-                    className="flex place-content-center py-2"
-                >
-                    <input
-                        type="text"
-                        className="mx-auto w-full p-4 rounded border border-gray-400"
-                        ref={messageBody}
-                        required
-                    />
-                    <button className="bg-green-400 text-white p-4 rounded mx-4">
-                        Send
-                    </button>
+                <form onSubmit={postMessage}>
+                    <input type="file" name="image" ref={messageFileRef} />
+                    <div className="flex place-content-center py-2">
+                        <input
+                            type="text"
+                            className="mx-auto w-full p-4 rounded border border-gray-400"
+                            ref={messageBody}
+                        />
+                        <button className="bg-green-400 text-white p-4 rounded mx-4">
+                            Send
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

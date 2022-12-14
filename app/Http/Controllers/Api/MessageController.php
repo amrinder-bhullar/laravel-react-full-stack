@@ -28,10 +28,16 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            "body" => "required",
+            "body" => ["required_if:image,null"],
+            "image" => ["required_if:body,null", "max:2048"],
             "user_id" => "numeric",
             "ticket_id" => "numeric"
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('messageImages', 'public');
+        }
+
 
         Message::create($data);
 

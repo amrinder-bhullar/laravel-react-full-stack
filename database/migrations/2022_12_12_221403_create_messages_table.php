@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('ticket_id')->constrained()->cascadeOnDelete();
-            $table->longText('body');
+            $table->longText('body')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
