@@ -12,7 +12,8 @@ class Message extends Model
     protected $fillable = [
         'body',
         'user_id',
-        'ticket_id'
+        'ticket_id',
+        'image'
     ];
 
     public function Ticket()

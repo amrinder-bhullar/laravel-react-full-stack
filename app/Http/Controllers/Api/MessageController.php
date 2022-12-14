@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\MessageResource;
+use App\Models\Ticket;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Dflydev\DotAccessData\Data;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\MessageResource;
 
 class MessageController extends Controller
 {
@@ -25,23 +27,26 @@ class MessageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Ticket $ticket)
     {
         $data = $request->validate([
             "body" => ["required_if:image,null"],
-            "image" => ["required_if:body,null", "max:2048"],
-            "user_id" => "numeric",
-            "ticket_id" => "numeric"
+            "image.*" => ["image", "max:2048"],
+            // "user_id" => "numeric",
+            // "ticket_id" => "numeric"
         ]);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('messageImages', 'public');
         }
 
+        $data['user_id'] = $request->user()->id;
+        $data['ticket_id'] = $ticket->id;
+
 
         Message::create($data);
 
-        return response(201);
+        return response("message created", 201);
     }
 
     /**

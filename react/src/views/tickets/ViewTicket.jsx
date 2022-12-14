@@ -12,9 +12,10 @@ const ViewTicket = () => {
     const [ticket, setTicket] = useState([]);
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [fileUpload, setFileUpload] = useState({});
     const params = useParams();
     const messageBody = useRef();
-    const messageFileRef = useRef();
+    // const messageFileRef = useRef();
     const [errors, setErrors] = useState(null);
     const { user } = useStateContext();
 
@@ -42,21 +43,25 @@ const ViewTicket = () => {
 
     const postMessage = (e) => {
         e.preventDefault();
-        const messageFileData = new FormData();
-        messageFileData.append("image", messageFileRef.current.files[0]);
-        const payload = {
-            body: messageBody.current.value,
-            image: messageFileData,
-            ticket_id: ticket.id,
-            user_id: user.id,
-        };
-        console.log(messageFileRef.current.files[0]);
+
+        const formData = new FormData();
+        formData.append("image", fileUpload);
+        formData.append("body", messageBody.current.value);
+
+        // const payload = {
+        //     body: messageBody.current.value,
+        //     image: messageFileData,
+        //     ticket_id: ticket.id,
+        //     user_id: user.id,
+        // };
+        // console.log("Check file upload", messageFileData);
         axiosClient
-            .post(`/tickets/${ticket.id}/message`, payload)
+            .post(`/tickets/${ticket.id}/message`, formData)
             .then(({ data }) => {
                 console.log(data);
                 getTicket();
                 messageBody.current.value = "";
+                setFileUpload({});
             })
             .catch((err) => {
                 const response = err.response;
@@ -69,7 +74,7 @@ const ViewTicket = () => {
     };
 
     return (
-        <div className="mb-12">
+        <div className="mb-20">
             {!loading && (
                 <div>
                     <h1 className="text-3xl">{title}</h1>
@@ -94,7 +99,14 @@ const ViewTicket = () => {
                     </div>
                 )}
                 <form onSubmit={postMessage}>
-                    <input type="file" name="image" ref={messageFileRef} />
+                    <input
+                        type="file"
+                        name="image"
+                        // value={fileUpload}
+                        onChange={(e) => {
+                            setFileUpload(e.target.files[0]);
+                        }}
+                    />
                     <div className="flex place-content-center py-2">
                         <input
                             type="text"
