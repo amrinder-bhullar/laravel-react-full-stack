@@ -20,7 +20,7 @@ class TicketResource extends JsonResource
             'title' => $this->title,
             'body' => $this->body,
             'user' => new UserResource(User::find($this->user_id)),
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at->diffForHumans(),
             'messages' => MessageResource::collection($this->whenLoaded('messages'))
         ];
     }

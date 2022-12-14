@@ -1,3 +1,4 @@
+import { truncate } from "lodash";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -20,7 +21,7 @@ function Tickets() {
             .then(({ data }) => {
                 setLoading(false);
                 setTickets(data.data);
-                console.log(data);
+                // console.log(data);
             })
             .catch(() => {
                 setLoading(false);
@@ -74,29 +75,36 @@ function Tickets() {
                     )}
                     {!loading && (
                         <tbody>
-                            {tickets.map((ticket) => (
-                                <tr key={ticket.id}>
-                                    <td>{ticket.id}</td>
-                                    <td>{ticket.title}</td>
-                                    <td>{ticket.body}</td>
-                                    <td>{ticket.created_at}</td>
-                                    <td>
-                                        <Link
-                                            className="btn-edit"
-                                            to={"/tickets/" + ticket.id}
-                                        >
-                                            View
-                                        </Link>
-                                        &nbsp;
-                                        <button
-                                            onClick={(e) => onDelete(ticket)}
-                                            className="btn-delete"
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {tickets.map((ticket) => {
+                                let { title, body, id, created_at } = ticket;
+                                title = truncate(ticket.title, 10);
+                                body = truncate(ticket.body, 10);
+                                return (
+                                    <tr key={id}>
+                                        <td>{id}</td>
+                                        <td>{title}</td>
+                                        <td>{body}</td>
+                                        <td>{created_at}</td>
+                                        <td>
+                                            <Link
+                                                className="btn-edit"
+                                                to={"/tickets/" + ticket.id}
+                                            >
+                                                View
+                                            </Link>
+                                            &nbsp;
+                                            <button
+                                                onClick={(e) =>
+                                                    onDelete(ticket)
+                                                }
+                                                className="btn-delete"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     )}
                 </table>

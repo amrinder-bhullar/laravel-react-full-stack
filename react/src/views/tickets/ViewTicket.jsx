@@ -90,7 +90,7 @@ const ViewTicket = () => {
                 messages.map((message) => (
                     <MessageCard key={message.id} message={message} />
                 ))}
-            <div className="fixed bottom-0 w-8/12 mx-auto bg-gray-100">
+            <div className="fixed bottom-0 w-8/12 mx-auto bg-gray-100 py-2">
                 {errors && (
                     <div className="alert">
                         {Object.keys(errors).map((key) => (
